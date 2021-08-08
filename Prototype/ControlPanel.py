@@ -83,19 +83,9 @@ class ControlWindow(QWidget):
         #self.change_button.move(80, 235)
         self.ConsoleTextLog.move(260,25)
     
-    
-    def ChangeWin(self):
-        """
-        windowのオンオフを切り替える
-
-        Returns
-        -------
-        None.
-
-        """
-        print(self.NowState)
-        if(self.NowState=="On"):
-            self.Windows[self.NowState].WinDeactive()
+    def show(self):
+        super().show()
+        if(self.NowState=="Off"):
             self.change_button.setStyleSheet("""
                                          QPushButton {
                                              color: #fff;
@@ -115,11 +105,8 @@ class ControlWindow(QWidget):
                                              }""")
             self.colorChange(self.GREEN)
             self.change_button.setText("On")
-            self.NowState="Off"
             self.ConsoleTextLog.setText(self.Trigers[self.NowState])
-            self.Windows[self.NowState].WinActive()
-        elif (self.NowState=="Off"):
-            self.Windows[self.NowState].WinDeactive()
+        elif (self.NowState=="On"):
             self.change_button.setStyleSheet("""
                                          QPushButton {
                                              color: #fff;
@@ -139,9 +126,17 @@ class ControlWindow(QWidget):
                                              }""")
             self.colorChange(self.BLUE)
             self.change_button.setText("Off")
-            self.NowState="On"
             self.ConsoleTextLog.setText(self.Trigers[self.NowState])
-            self.Windows[self.NowState].WinActive()
+            
+    def ChangeWin(self):
+        """
+        windowのオンオフを切り替える
+
+        """
+        #print(self.NowState)
+        self.Windows[self.NowState].WinDeactive()
+        self.NowState="Off" if self.NowState=="On" else "On" 
+        self.Windows[self.NowState].WinActive()
         self.hide()
         self.startTime=datetime.datetime.now()
             
